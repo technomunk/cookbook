@@ -2,6 +2,6 @@
 
 Recipe management database engine.
 
-## Building
+## Running
 
-- Get [`go`](https://golang.org/doc/install).
+- `go run .`
