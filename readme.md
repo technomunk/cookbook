@@ -13,9 +13,9 @@ Recipe management database engine.
 
 ## Terminology
 
-- **Recipe** - an instruction how to create something. For the purposes of this project a recipe
-consists of the product (the result), the ingredients (requirements), rates (how much is produced/
-consumed) and the station (or process) by which the product is made.
+- **Recipe** - a general blueprint how to create something. It consists of the *product* (result),
+*ingredients* (components that are required to make the recipe), *rates* (abstract relative amounts)
+and *process* (that is required for the recipe).
 
 ## Features
 
