@@ -17,13 +17,17 @@ func CreateTables(db *sql.DB) error {
 "recipeid" INTEGER PRIMARY KEY,
 "product" TEXT NOT NULL,
 "rate" REAL NOT NULL,
-"process" TEXT);`
+"process" TEXT);
+CREATE INDEX idx_product ON recipe(product);
+`
 	const createIngredientsTableQuery = `CREATE TABLE ingredient(
 "recipeid" INTEGER NOT NULL,
 "name" TEXT NOT NULL,
 "rate" REAL NOT NULL,
 FOREIGN KEY(recipeid) REFERENCES recipe(recipeid)
-);`
+);
+CREATE INDEX idx_recipeid ON ingredient(recipeid);
+CREATE INDEX idx_name ON ingredient(name);`
 
 	_, err := db.Exec(createRecipesTableQuery)
 	if err != nil {
