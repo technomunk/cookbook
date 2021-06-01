@@ -7,7 +7,10 @@ import (
 )
 
 func defaultHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println(r.Method, r.URL)
+	if r.URL.Path != "/" {
+		http.NotFound(w, r)
+		return
+	}
 	fmt.Fprintf(w, "Hello! The website is up!")
 }
 
