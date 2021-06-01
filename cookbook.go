@@ -3,9 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/technomunk/cookbook/recipe"
 )
 
@@ -19,10 +21,16 @@ func defaultHandler(w http.ResponseWriter, r *http.Request) {
 
 func viewHandler(w http.ResponseWriter, r *http.Request) {
 	// TODO: the exact recipe should be gotten from url
-	err := recipe.Templates.ExecuteTemplate(w, "recipe.txt", recipe.ExampleRecipe)
+	err := recipeTemplates.ExecuteTemplate(w, "recipe.txt", recipe.ExampleRecipe)
 	if err != nil {
 		http.Error(w, "Failed to populate template", http.StatusInternalServerError)
 	}
+}
+
+var recipeTemplates *template.Template
+
+func init() {
+	recipeTemplates = template.Must(template.ParseFiles("content/tmpl/recipe.txt"))
 }
 
 func main() {
