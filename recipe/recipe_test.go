@@ -29,7 +29,7 @@ func TestInsertAndFindRecipe(t *testing.T) {
 		t.Fatal("recipe was already present in a database")
 	}
 
-	err = recipe.Insert(db, &recipe.ExampleRecipe)
+	_, err = recipe.Insert(db, &recipe.ExampleRecipe)
 	if err != nil {
 		t.Fatal(err)
 	}

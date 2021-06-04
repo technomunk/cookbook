@@ -21,8 +21,8 @@ and *process* (that is required for the recipe).
 
 The following list is a defacto requirements document for this project.
 
-- [ ] Storing recipes in a performant manner.
-- [ ] Retrieving recipes by name in a performant manner.
+- [x] Storing recipes in a performant manner.
+- [x] Retrieving recipes by name in a performant manner.
 - [ ] Retrieving recipes by ingredients in a performant manner.
 - [ ] Querying recipes fitting a certain criteria.
 - [ ] Authenticating existing users.

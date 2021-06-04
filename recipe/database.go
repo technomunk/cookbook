@@ -7,7 +7,7 @@ import (
 
 // A database entry with a provided recipe
 type RecipeEntry struct {
-	Id     int
+	Id     int64
 	Recipe Recipe
 }
 
@@ -39,32 +39,32 @@ CREATE INDEX idx_name ON ingredient(name);`
 }
 
 // Insert a new recipe into the database.
-func Insert(db *sql.DB, r *Recipe) error {
+func Insert(db *sql.DB, r *Recipe) (int64, error) {
 	const insertRecipeQuery = `INSERT INTO recipe(product, rate, process) VALUES(?, ?, ?);`
 	const insertIngredientQuery = `INSERT INTO ingredient(recipeid, name, rate) VALUES (?, ?, ?);`
 
 	// Initialize the transaction
 	tx, err := db.Begin()
 	if err != nil {
-		return err
+		return 0, err
 	}
 	defer tx.Rollback() // the rollback is ignored if the transaction was committed.
 
 	// Insert the recipe without ingredients
 	result, err := tx.Exec(insertRecipeQuery, r.Product, r.Rate, r.Process)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	// Prepare ingredient query
 	rid, err := result.LastInsertId()
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	stmt, err := tx.Prepare(insertIngredientQuery)
 	if err != nil {
-		return err
+		return 0, err
 	}
 	defer stmt.Close() // prepared statements should be closed after use
 
@@ -72,12 +72,17 @@ func Insert(db *sql.DB, r *Recipe) error {
 	for _, ingredient := range r.Ingredients {
 		_, err = stmt.Exec(rid, ingredient.Name, ingredient.Rate)
 		if err != nil {
-			return err
+			return 0, err
 		}
 	}
 
 	// Commit the transaction
-	return tx.Commit()
+	err = tx.Commit()
+	if err != nil {
+		return 0, err
+	}
+
+	return rid, nil
 }
 
 // Select recipes that produce provided product without ingredients.
@@ -92,7 +97,7 @@ func selectRecipes(db *sql.DB, product string) ([]RecipeEntry, error) {
 
 	for rows.Next() {
 		var (
-			recipeId int
+			recipeId int64
 			product  string
 			rate     float64
 			process  string
@@ -130,7 +135,7 @@ func selectRecipeIngredients(db *sql.DB, recipes []RecipeEntry) error {
 
 	for rcp := &recipes[0]; rows.Next(); {
 		var (
-			recipeId int
+			recipeId int64
 			name     string
 			rate     float64
 		)
