@@ -85,16 +85,58 @@ func Insert(db *sql.DB, r *Recipe) (int64, error) {
 	return rid, nil
 }
 
-// Select recipes that produce provided product without ingredients.
-func selectRecipes(db *sql.DB, product string) ([]RecipeEntry, error) {
-	rows, err := db.Query(`SELECT * FROM recipe WHERE product=?;`, product)
+// Search the database for recipes that create provided product.
+func SearchByName(db *sql.DB, product string) ([]RecipeEntry, error) {
+	rows, err := db.Query("SELECT * FROM recipe WHERE product=?;", product)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
+	recipes, err := scanRecipeQuery(db, rows)
+	if err != nil {
+		return nil, err
+	}
+
+	return recipes, nil
+}
+
+// Search the database for a recipe with provided id.
+func SearchById(db *sql.DB, rid int64) (*RecipeEntry, error) {
+	rows, err := db.Query("SELECT * FROM recipe WHERE recipeid=?;", rid)
+	if err != nil {
+		return nil, err
+	}
+
+	recipes, err := scanRecipeQuery(db, rows)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(recipes) == 0 {
+		return nil, nil
+	}
+
+	return &recipes[0], nil
+}
+
+// Gather results of a recipe query.
+func scanRecipeQuery(db *sql.DB, query *sql.Rows) ([]RecipeEntry, error) {
+	recipes, err := scanRecipes(query)
+	if err != nil {
+		return nil, err
+	}
+
+	err = selectRecipeIngredients(db, recipes)
+	if err != nil {
+		return nil, err
+	}
+
+	return recipes, nil
+}
+
+// Populate recipes from the provided query result.
+func scanRecipes(rows *sql.Rows) ([]RecipeEntry, error) {
 	recipes := make([]RecipeEntry, 0)
-
 	for rows.Next() {
 		var (
 			recipeId int64
@@ -102,7 +144,7 @@ func selectRecipes(db *sql.DB, product string) ([]RecipeEntry, error) {
 			rate     float64
 			process  string
 		)
-		err = rows.Scan(&recipeId, &product, &rate, &process)
+		err := rows.Scan(&recipeId, &product, &rate, &process)
 		if err != nil {
 			return nil, err
 		}
@@ -157,18 +199,4 @@ func selectRecipeIngredients(db *sql.DB, recipes []RecipeEntry) error {
 	}
 
 	return nil
-}
-
-// Search the databases for recipes that create provided product.
-func Find(db *sql.DB, product string) ([]RecipeEntry, error) {
-	recipes, err := selectRecipes(db, product)
-	if err != nil {
-		return nil, err
-	}
-	err = selectRecipeIngredients(db, recipes)
-	if err != nil {
-		return nil, err
-	}
-
-	return recipes, nil
 }

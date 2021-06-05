@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{.Product}} recipe.</title>
+</head>
+<body>
+	{{.Rate}} {{.Product}}:
+	<ul>{{range .Ingredients}}
+		<li>{{.Rate}}g {{.Name}}</li>
+	{{end}}</ul>
+</body>
+</html>

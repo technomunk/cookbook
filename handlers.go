@@ -27,12 +27,30 @@ func rootHandler(rw http.ResponseWriter, r *http.Request) {
 }
 
 func viewRecipeHandler(w http.ResponseWriter, r *http.Request) {
-	// TODO: the exact recipe should be gotten from url
-	err := recipeTemplates.ExecuteTemplate(w, "recipe.txt", recipe.ExampleRecipe)
-	if err != nil {
-		http.Error(w, "Failed to populate template", http.StatusInternalServerError)
+	rq := r.URL.Query()
+
+	if rid, ok := parseInt64(rq.Get("rid")); ok {
+		rcp, err := recipe.SearchById(db, rid)
+		if err != nil {
+			// TODO: figure out how to respond
+			return
+		}
+
+		if rcp == nil {
+			http.Error(w, "Recipe not found", http.StatusNotFound)
+			return
+		}
+
+		err = recipeTemplates.ExecuteTemplate(w, "recipe.html", rcp.Recipe)
+		if err != nil {
+			http.Error(w, "Failed to populate template", http.StatusInternalServerError)
+			return
+		}
 		return
 	}
+
+	// TODO: enumerate recipes on empty query
+	http.Error(w, "Under development", http.StatusNotImplemented)
 }
 
 func editRecipeHandler(w http.ResponseWriter, r *http.Request) {

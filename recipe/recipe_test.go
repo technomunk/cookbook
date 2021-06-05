@@ -20,7 +20,7 @@ func TestInsertAndFindRecipe(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	recipes, err := recipe.Find(db, "dough")
+	recipes, err := recipe.SearchByName(db, "dough")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -34,7 +34,7 @@ func TestInsertAndFindRecipe(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	recipes, err = recipe.Find(db, "dough")
+	recipes, err = recipe.SearchByName(db, "dough")
 	if err != nil {
 		t.Fatal(err)
 	}
