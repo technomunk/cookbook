@@ -14,9 +14,9 @@ import (
 var recipeTemplates *template.Template
 
 func init() {
-	recipeTemplates = template.Must(template.ParseFiles("content/tmpl/recipe.html"))
+	recipeTemplates = template.Must(template.ParseFiles("content/tmpl/recipe.html", "content/tmpl/overview.html"))
 	var err error
-	db, err = sql.Open("sqlite3", "food.db")
+	db, err = sql.Open("sqlite3", "data/food.db")
 	if err != nil {
 		log.Fatal(err)
 	}

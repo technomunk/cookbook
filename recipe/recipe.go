@@ -56,4 +56,23 @@ func (a *Recipe) SameAs(b *Recipe) bool {
 	return true
 }
 
+// Scale the rates of the recipe and ingredients to achieve provided result rate.
+func (r *Recipe) AdjustRate(rate Rate) {
+	m := rate / r.Rate
+	r.Rate *= m
+	for i := range r.Ingredients {
+		r.Ingredients[i].Rate *= m
+	}
+}
+
+// Perform a deep copy of the recipe.
+func (r *Recipe) Clone() Recipe {
+	ingrs := make([]Ingredient, len(r.Ingredients))
+	for i := range r.Ingredients {
+		ingrs[i] = r.Ingredients[i]
+	}
+
+	return Recipe{r.Product, r.Rate, ingrs, r.Process}
+}
+
 var ExampleRecipe = Recipe{"dough", 1.63, []Ingredient{{"flour", 1}, {"water", .6}, {"salt", .02}, {"yeast", .01}}, "mix"}

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<header>
+	<title>Recipes overview.</title>
+</header>
+<body>
+	<main>
+		<h1>Available recipes:</h1>
+		<ul>{{range .}}
+			<li><a href="?rid={{.Id}}">{{.Product}}</a></li>
+		{{end}}</ul>
+	</main>
+</body>
+</html>

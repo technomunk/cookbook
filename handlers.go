@@ -26,31 +26,39 @@ func rootHandler(rw http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(rw, "Hello %s! The website is up!", user)
 }
 
-func viewRecipeHandler(w http.ResponseWriter, r *http.Request) {
+func viewRecipeHandler(rw http.ResponseWriter, r *http.Request) {
 	rq := r.URL.Query()
 
 	if rid, ok := parseInt64(rq.Get("rid")); ok {
 		rcp, err := recipe.SearchById(db, rid)
 		if err != nil {
-			// TODO: figure out how to respond
+			log.Println(err)
+			http.Error(rw, "Error searching for recipe", http.StatusInternalServerError)
 			return
 		}
 
 		if rcp == nil {
-			http.Error(w, "Recipe not found", http.StatusNotFound)
+			http.Error(rw, "Recipe not found", http.StatusNotFound)
 			return
 		}
 
-		err = recipeTemplates.ExecuteTemplate(w, "recipe.html", rcp.Recipe)
+		err = recipeTemplates.ExecuteTemplate(rw, "recipe.html", rcp.Recipe)
 		if err != nil {
-			http.Error(w, "Failed to populate template", http.StatusInternalServerError)
+			http.Error(rw, "Failed to populate template", http.StatusInternalServerError)
 			return
 		}
 		return
 	}
 
-	// TODO: enumerate recipes on empty query
-	http.Error(w, "Under development", http.StatusNotImplemented)
+	// TODO: handle other queries
+
+	rcps, err := recipe.EnumerateAll(db)
+	if err != nil {
+		http.Error(rw, "Failed to get recipes", http.StatusInternalServerError)
+		return
+	}
+
+	recipeTemplates.ExecuteTemplate(rw, "overview.html", rcps)
 }
 
 func editRecipeHandler(w http.ResponseWriter, r *http.Request) {

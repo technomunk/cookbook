@@ -4,18 +4,44 @@
 	<title>Add a new recipe.</title>
 </head>
 <body>
-	<form method="POST">
-		<label for="product">Result:</label>
-		<input type="text" id="product" name="product" minlength="1">
-		
-		<label for="rate">Rate:</label>
-		<input type="number" id="rate" name="rate" min="0">
+	<h1>Add new recipe.</h1>
+	<main>
+		<form method="POST">
+			<label for="product">Result:</label>
+			<input type="text" id="product" name="product" minlength="1">
+			
+			<label for="rate">Rate:</label>
+			<input type="number" id="rate" name="rate" min="0">
+	
+			<label for="process">Process:</label>
+			<input type="text" id="process" name="process">
+	
+			<label>Ingredients:</label>
+			<noscript>
+				<label for="ingredient-name">Name:</label>
+				<input type="text" id="ingredient-name" name="ingredient-name" minlength="1">
+				<label for="ingredient-rate">Rate:</label>
+				<input type="number" id="ingredient-rate" name="ingredient-rate" min="0">
 
-		<label for="process">Process:</label>
-		<input type="text" id="process" name="process">
-
-		<!-- TODO: add ingredients addition script -->
-		<input type="submit" value="Submit">
-	</form>
+				<label for="ingredient-name">Name:</label>
+				<input type="text" id="ingredient-name" name="ingredient-name" minlength="1">
+				<label for="ingredient-rate">Rate:</label>
+				<input type="number" id="ingredient-rate" name="ingredient-rate" min="0">
+				
+				<label for="ingredient-name">Name:</label>
+				<input type="text" id="ingredient-name" name="ingredient-name" minlength="1">
+				<label for="ingredient-rate">Rate:</label>
+				<input type="number" id="ingredient-rate" name="ingredient-rate" min="0">
+				
+				<label for="ingredient-name">Name:</label>
+				<input type="text" id="ingredient-name" name="ingredient-name" minlength="1">
+				<label for="ingredient-rate">Rate:</label>
+				<input type="number" id="ingredient-rate" name="ingredient-rate" min="0">
+			</noscript>
+	
+			<!-- TODO: add ingredients addition script -->
+			<input type="submit" value="Submit">
+		</form>
+	</main>
 </body>
 </html>

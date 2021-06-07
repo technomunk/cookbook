@@ -2,13 +2,20 @@ package recipe
 
 import (
 	"database/sql"
+	"fmt"
 	"strconv"
 )
 
-// A database entry with a provided recipe
+// A database entry with a provided recipe.
 type RecipeEntry struct {
 	Id     int64
 	Recipe Recipe
+}
+
+// Partial recipe entry that only provides the recipe id and its name.
+type PartialRecipeEntry struct {
+	Id      int64
+	Product string
 }
 
 // Create tables necessary to store recipe and their ingredients.
@@ -92,7 +99,7 @@ func SearchByName(db *sql.DB, product string) ([]RecipeEntry, error) {
 		return nil, err
 	}
 
-	recipes, err := scanRecipeQuery(db, rows)
+	recipes, err := scanFullRecipeQuery(db, rows)
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +114,7 @@ func SearchById(db *sql.DB, rid int64) (*RecipeEntry, error) {
 		return nil, err
 	}
 
-	recipes, err := scanRecipeQuery(db, rows)
+	recipes, err := scanFullRecipeQuery(db, rows)
 	if err != nil {
 		return nil, err
 	}
@@ -119,9 +126,21 @@ func SearchById(db *sql.DB, rid int64) (*RecipeEntry, error) {
 	return &recipes[0], nil
 }
 
+// Get all recipe names and ids from the database.
+func EnumerateAll(db *sql.DB) ([]PartialRecipeEntry, error) {
+	// Get all recipes
+	rows, err := db.Query("SELECT * FROM recipe;")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	return scanPartialRecipes(rows)
+}
+
 // Gather results of a recipe query.
-func scanRecipeQuery(db *sql.DB, query *sql.Rows) ([]RecipeEntry, error) {
-	recipes, err := scanRecipes(query)
+func scanFullRecipeQuery(db *sql.DB, query *sql.Rows) ([]RecipeEntry, error) {
+	recipes, err := scanFullRecipes(query)
 	if err != nil {
 		return nil, err
 	}
@@ -135,7 +154,7 @@ func scanRecipeQuery(db *sql.DB, query *sql.Rows) ([]RecipeEntry, error) {
 }
 
 // Populate recipes from the provided query result.
-func scanRecipes(rows *sql.Rows) ([]RecipeEntry, error) {
+func scanFullRecipes(rows *sql.Rows) ([]RecipeEntry, error) {
 	recipes := make([]RecipeEntry, 0)
 	for rows.Next() {
 		var (
@@ -154,6 +173,24 @@ func scanRecipes(rows *sql.Rows) ([]RecipeEntry, error) {
 	return recipes, nil
 }
 
+// Populate partial recipes from provided query result.
+func scanPartialRecipes(rows *sql.Rows) ([]PartialRecipeEntry, error) {
+	rcps := make([]PartialRecipeEntry, 0)
+	for rows.Next() {
+		var (
+			recipeId int64
+			product  string
+		)
+		err := rows.Scan(&recipeId, &product)
+		if err != nil {
+			return nil, err
+		}
+		rcps = append(rcps, PartialRecipeEntry{recipeId, product})
+	}
+
+	return rcps, nil
+}
+
 // Gather recipe ingredients for each of the recipes in the provided slice.
 func selectRecipeIngredients(db *sql.DB, recipes []RecipeEntry) error {
 	if len(recipes) == 0 {
@@ -163,33 +200,39 @@ func selectRecipeIngredients(db *sql.DB, recipes []RecipeEntry) error {
 	// Collect recipe ids
 	rids := ""
 	for i := range recipes {
-		rids += strconv.Itoa(i)
+		rids += strconv.FormatInt(recipes[i].Id, 10)
 		if i+1 < len(recipes) {
 			rids += ","
 		}
 	}
 
-	rows, err := db.Query(`SELECT * FROM ingredient WHERE recipeid IN(?) ORDER BY recipeid;`, rids)
+	// Query ingredients
+	rows, err := db.Query(fmt.Sprintf("SELECT * FROM ingredient WHERE recipeid IN (%s) ORDER BY recipeid;", rids))
 	if err != nil {
 		return err
 	}
 	defer rows.Close()
 
-	for rcp := &recipes[0]; rows.Next(); {
+	return scanRecipeIngredients(recipes, rows)
+}
+
+// Gather all ingredients from provided query and insert them into associated recipes.
+func scanRecipeIngredients(rcps []RecipeEntry, ingrs *sql.Rows) error {
+	for rcp := &rcps[0]; ingrs.Next(); {
 		var (
 			recipeId int64
 			name     string
 			rate     float64
 		)
-		err = rows.Scan(&recipeId, &name, &rate)
+		err := ingrs.Scan(&recipeId, &name, &rate)
 		if err != nil {
 			return err
 		}
 
 		if rcp.Id != recipeId {
-			for idx := range recipes {
-				if recipeId == recipes[idx].Id {
-					rcp = &recipes[idx]
+			for idx := range rcps {
+				if recipeId == rcps[idx].Id {
+					rcp = &rcps[idx]
 					break
 				}
 			}
