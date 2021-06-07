@@ -93,7 +93,7 @@ func Insert(db *sql.DB, r *Recipe) (int64, error) {
 }
 
 // Search the database for recipes that create provided product.
-func SearchByName(db *sql.DB, product string) ([]RecipeEntry, error) {
+func SearchByProduct(db *sql.DB, product string) ([]RecipeEntry, error) {
 	rows, err := db.Query("SELECT * FROM recipe WHERE product=?;", product)
 	if err != nil {
 		return nil, err

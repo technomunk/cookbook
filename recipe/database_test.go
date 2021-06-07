@@ -20,7 +20,7 @@ func TestInsertAndFindRecipe(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	recipes, err := recipe.SearchByName(db, "dough")
+	recipes, err := recipe.SearchByProduct(db, recipe.ExampleRecipe.Product)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -34,12 +34,12 @@ func TestInsertAndFindRecipe(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	recipes, err = recipe.SearchByName(db, "dough")
+	recipes, err = recipe.SearchByProduct(db, recipe.ExampleRecipe.Product)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if len(recipes) != 1 || recipe.ExampleRecipe.SameAs(&recipes[0].Recipe) {
+	if len(recipes) != 1 || !recipe.ExampleRecipe.SameAs(&recipes[0].Recipe) {
 		t.Fatal("did not find the expected recipes")
 	}
 }
