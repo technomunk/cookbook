@@ -6,40 +6,54 @@
 <body>
 	<h1>Add new recipe.</h1>
 	<main>
+		<!-- TODO: add custom form validation -->
 		<form method="POST">
 			<label for="product">Result:</label>
-			<input type="text" id="product" name="product" minlength="1">
+			<input type="text" id="product" name="product" minlength="1" pattern="\w([\w ]+\w)?" required>
 			
 			<label for="rate">Rate:</label>
-			<input type="number" id="rate" name="rate" min="0">
+			<input type="number" id="rate" name="rate" min="0"  step="any" required>
 	
 			<label for="process">Process:</label>
-			<input type="text" id="process" name="process">
+			<input type="text" id="process" name="process" pattern="\w([\w ]+\w)?">
 	
-			<label>Ingredients:</label>
-			<noscript>
-				<label for="ingredient-name">Name:</label>
-				<input type="text" id="ingredient-name" name="ingredient-name" minlength="1">
-				<label for="ingredient-rate">Rate:</label>
-				<input type="number" id="ingredient-rate" name="ingredient-rate" min="0">
-
-				<label for="ingredient-name">Name:</label>
-				<input type="text" id="ingredient-name" name="ingredient-name" minlength="1">
-				<label for="ingredient-rate">Rate:</label>
-				<input type="number" id="ingredient-rate" name="ingredient-rate" min="0">
-				
-				<label for="ingredient-name">Name:</label>
-				<input type="text" id="ingredient-name" name="ingredient-name" minlength="1">
-				<label for="ingredient-rate">Rate:</label>
-				<input type="number" id="ingredient-rate" name="ingredient-rate" min="0">
-				
-				<label for="ingredient-name">Name:</label>
-				<input type="text" id="ingredient-name" name="ingredient-name" minlength="1">
-				<label for="ingredient-rate">Rate:</label>
-				<input type="number" id="ingredient-rate" name="ingredient-rate" min="0">
-			</noscript>
-	
-			<!-- TODO: add ingredients addition script -->
+			<div id="ingredients">
+				<label>Ingredients:</label>
+				<div id="ingredient-row">
+					<label id="label-name" for="ingredient-name">Name:</label>
+					<input id="input-name" type="text" id="ingredient-name" name="ingredient-name" minlength="1" pattern="\w([\w ]+\w)?">
+					<label id="label-rate" for="ingredient-rate">Rate:</label>
+					<input id="input-rate" type="number" id="ingredient-rate" name="ingredient-rate" min="0" step="any">
+				</div>
+				<script src="/content/ingredient-input.js"></script>
+				<noscript>
+					<div>
+						<label for="ingredient-name">Name:</label>
+						<input type="text" id="ingredient-name" name="ingredient-name" minlength="1">
+						<label for="ingredient-rate">Rate:</label>
+						<input type="number" id="ingredient-rate" name="ingredient-rate" min="0" step="any">
+					</div>
+					<div>
+						<label for="ingredient-name">Name:</label>
+						<input type="text" id="ingredient-name" name="ingredient-name" minlength="1">
+						<label for="ingredient-rate">Rate:</label>
+						<input type="number" id="ingredient-rate" name="ingredient-rate" min="0" step="any">
+					</div>
+					<div>
+						<label for="ingredient-name">Name:</label>
+						<input type="text" id="ingredient-name" name="ingredient-name" minlength="1">
+						<label for="ingredient-rate">Rate:</label>
+						<input type="number" id="ingredient-rate" name="ingredient-rate" min="0" step="any">
+					</div>
+					<div>
+						<label for="ingredient-name">Name:</label>
+						<input type="text" id="ingredient-name" name="ingredient-name" minlength="1">
+						<label for="ingredient-rate">Rate:</label>
+						<input type="number" id="ingredient-rate" name="ingredient-rate" min="0" step="any">
+					</div>
+				</noscript>
+			</div>
+			
 			<input type="submit" value="Submit">
 		</form>
 	</main>

@@ -29,6 +29,7 @@ func main() {
 	http.HandleFunc("/", logged(rootHandler))
 	http.HandleFunc("/food/view/", logged(viewRecipeHandler))
 	http.HandleFunc("/food/add/", logged(addRecipeHandler))
+	http.HandleFunc("/content/", logged(contentHandler))
 
 	log.Println("Listening on", *port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", *port), nil))

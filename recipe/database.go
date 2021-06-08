@@ -129,7 +129,7 @@ func SearchById(db *sql.DB, rid int64) (*RecipeEntry, error) {
 // Get all recipe names and ids from the database.
 func EnumerateAll(db *sql.DB) ([]PartialRecipeEntry, error) {
 	// Get all recipes
-	rows, err := db.Query("SELECT * FROM recipe;")
+	rows, err := db.Query("SELECT recipeid, product FROM recipe;")
 	if err != nil {
 		return nil, err
 	}
