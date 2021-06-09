@@ -74,7 +74,11 @@ func editRecipeHandler(w http.ResponseWriter, r *http.Request) {
 
 // Provides the recipe creation form or processing incoming POST requests.
 func addRecipeHandler(rw http.ResponseWriter, r *http.Request) {
-	// TODO: require authentication
+	ok := requireAuth(rw, r)
+	if !ok {
+		return
+	}
+
 	switch r.Method {
 	case http.MethodGet:
 		http.ServeFile(rw, r, "content/food-add.html")

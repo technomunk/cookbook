@@ -27,6 +27,7 @@ func main() {
 	flag.Parse()
 
 	http.HandleFunc("/", logged(rootHandler))
+	// TODO: switch to domain-based handlers
 	http.HandleFunc("/food/view/", logged(viewRecipeHandler))
 	http.HandleFunc("/food/add/", logged(addRecipeHandler))
 	http.HandleFunc("/content/", logged(contentHandler))
