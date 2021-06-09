@@ -26,8 +26,8 @@ The following list is a defacto requirements document for this project.
 - [ ] Retrieving recipes by ingredients in a performant manner.
 - [ ] Querying recipes fitting a certain criteria.
 - [x] Displaying a single recipe on a web-page.
-- [ ] Authenticating existing users.
-- [ ] Allowing authenticated users to add new recipes.*
+- [x] Authenticating existing users.
+- [x] Allowing authenticated users to add new recipes.
 - [ ] Allowing authenticated users to modify existing recipes.
 - [ ] Presenting recipes in a visually-appealing manner.
 - [ ] Integrated about/documentation page.
