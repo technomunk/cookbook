@@ -5,6 +5,7 @@ Recipe management database engine.
 ## Building
 
 - Install [go](https://golang.org/doc/install).
+- Create a file named "users.json" and populate it with a map of usernames to passwords you want to use.
 - Build the project `go build .`
 
 ## Running
