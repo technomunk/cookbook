@@ -1,59 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Add a new recipe.</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital@0;1&family=Sniglet&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="form.css">
+	<title>Add a new recipe</title>
+	<meta name="author" content="Grigory 'Technomunk' Glukhov">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-	<h1>Add new recipe.</h1>
 	<main>
 		<!-- TODO: add custom form validation -->
 		<form method="POST">
-			<label for="product">Result:</label>
-			<input type="text" id="product" name="product" minlength="1" pattern="\w([\w ]+\w)?" required>
-			
-			<label for="rate">Rate:</label>
-			<input type="number" id="rate" name="rate" min="0"  step="any" required>
-	
-			<label for="process">Process:</label>
-			<input type="text" id="process" name="process" pattern="\w([\w ]+\w)?">
-	
-			<div id="ingredients">
-				<label>Ingredients:</label>
-				<div id="ingredient-row">
-					<label id="label-name" for="ingredient-name">Name:</label>
-					<input id="input-name" type="text" id="ingredient-name" name="ingredient-name" minlength="1" pattern="\w([\w ]+\w)?">
-					<label id="label-rate" for="ingredient-rate">Rate:</label>
-					<input id="input-rate" type="number" id="ingredient-rate" name="ingredient-rate" min="0" step="any">
+			<h1>Recipe</h1>
+			<div class="divider"></div>
+			<section>
+				<div class="field">
+					<input type="text" id="product" name="product" minlength="1" pattern="\w([\w ]+\w)?" placeholder=" " required>
+					<label for="product">Result:</label>
+				</div>
+				<div class="field">
+					<input type="number" id="rate" name="rate" min="0"  step="any" placeholder=" " required>
+					<label for="rate">Rate:</label>
+				</div>
+				<div class="field">
+					<input type="text" id="process" name="process" pattern="\w([\w ]+\w)?" placeholder=" ">
+					<label for="process">Process:</label>
+				</div>
+			</section>
+			<div class="divider"></div>
+			<section>
+				<h2>Ingredients</h2>
+				<div class="flex" id="ingredient-field">
+					<div class="field wide">
+						<input type="text" id="ingredient-name" placeholder=" " list="ingredients" required>
+						<label for="ingredient-name">Ingredient</label>
+					</div>
+					<div class="field narrow">
+						<input type="number" id="ingredient-rate" placeholder=" " step="any" min="0" required>
+						<label for="ingredient-rate">Rate</label>
+					</div>
 				</div>
 				<script src="/content/ingredient-input.js"></script>
-				<noscript>
-					<div>
-						<label for="ingredient-name">Name:</label>
-						<input type="text" id="ingredient-name" name="ingredient-name" minlength="1">
-						<label for="ingredient-rate">Rate:</label>
-						<input type="number" id="ingredient-rate" name="ingredient-rate" min="0" step="any">
-					</div>
-					<div>
-						<label for="ingredient-name">Name:</label>
-						<input type="text" id="ingredient-name" name="ingredient-name" minlength="1">
-						<label for="ingredient-rate">Rate:</label>
-						<input type="number" id="ingredient-rate" name="ingredient-rate" min="0" step="any">
-					</div>
-					<div>
-						<label for="ingredient-name">Name:</label>
-						<input type="text" id="ingredient-name" name="ingredient-name" minlength="1">
-						<label for="ingredient-rate">Rate:</label>
-						<input type="number" id="ingredient-rate" name="ingredient-rate" min="0" step="any">
-					</div>
-					<div>
-						<label for="ingredient-name">Name:</label>
-						<input type="text" id="ingredient-name" name="ingredient-name" minlength="1">
-						<label for="ingredient-rate">Rate:</label>
-						<input type="number" id="ingredient-rate" name="ingredient-rate" min="0" step="any">
-					</div>
-				</noscript>
-			</div>
-			
+			</section>
+			<button type="button" id="add-ingredient" onclick="addIngredient()">
+				<svg width="44" height="40" viewBox="0 0 44 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<rect y="15" width="44" height="10"/>
+					<rect x="17" width="10" height="40"/>
+				</svg>
+			</button>
+			<div class="divider"></div>
 			<input type="submit" value="Submit">
 		</form>
 	</main>
