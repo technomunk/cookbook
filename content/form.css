@@ -12,6 +12,10 @@
 	--color-button-hover: #E53535;
 	--color-button-active: #B62020;
 
+	--color-cross-normal: #B0B0B0;
+	--color-cross-hover: black;
+	--color-cross-active: #660C00;
+
 	--fs-h1: 48px;
 	--fs-h2: 36px;
 	--fs-normal: 20px;
@@ -177,7 +181,7 @@ form>section>h2 {
 	margin: .4em;
 }
 
-/* Add ingredient button */
+/* "Add ingredient" button */
 
 button#add-ingredient {
 	display: block;
@@ -206,6 +210,27 @@ button#add-ingredient:active {
 	background-color: var(--color-button-active);
 }
 
+/* "Remove ingredient" button */
+
+.flex>button {
+	display: block;
+	border: none;
+	background-color: transparent;
+}
+
+.flex>button>svg {
+	vertical-align: middle;
+}
+
+.flex>button path {
+	fill: var(--color-cross-normal);
+}
+.flex>button:hover path {
+	fill: var(--color-cross-hover);
+}
+.flex>button:active path {
+	fill: var(--color-cross-active);
+}
 
 /* Submit button */
 
